@@ -8,48 +8,40 @@
 
 require 'yaml'
 MESSAGES = YAML.load_file('calculator_messages.yml')
-puts MESSAGES.inspect
+
 
 def prompt(message)
   Kernel.puts("=> #{message}")
 end
 
 def valid_number?(num)
-  num.to_i().nonzero?()
+  integer?(num) || float?(num)
 end
 
 def integer?(input)
-  # uses .to_i so if float is entered, input is converted to integer
-  # and will not match original input
   input.to_i.to_s == input
 end
 
 def float?(input)
-  input.to_f == input
-end
-
-def number?(input)
-  integer?(input) || float?(input)
+  input.to_f.to_s == input
 end
 
 def operator_to_message(op)
-  # if we assign the return value of the case
-  # into a variable 'operator' then we can return it
-  # at the end.
-  operator = case op
-  when '1'
-    'Adding'
-  when '2'
-    'Subracting'
-  when '3'
-    'Multplying'
-  when '4'
-    'Dividing'
-  end
+  operator = 
+    case op
+    when '1'
+      'Adding'
+    when '2'
+      'Subracting'
+    when '3'
+      'Multplying'
+    when '4'
+      'Dividing'
+    end
 
-  x = "Some code here"
+    x = "Random line of code"
 
-  operator
+    operator
 end
 
 prompt(MESSAGES['welcome'])
@@ -77,12 +69,13 @@ loop do # main loop
     if valid_number?(number1)
       break
     else
-      prompt(MESSAGES{'invalid_number'})
+      prompt(MESSAGES['invalid_number'])
     end
   end
 
   number2 = ''
   loop do
+  
     prompt(MESSAGES['second_number'])
     number2 = Kernel.gets().chomp()
 
@@ -110,7 +103,7 @@ loop do # main loop
     if %w(1 2 3 4).include?(operator)
       break
     else
-      prompt("Must choose 1, 2, 3 or 4")
+      prompt(MESSAGES['must_choose'])
     end
   end
 
@@ -129,10 +122,10 @@ loop do # main loop
   end
 
   prompt("The result is #{result}")
-
   prompt(MESSAGES['perform_again'])
   answer = Kernel.gets().chomp()
   break unless answer.downcase().start_with?('y')
 end
 
 prompt(MESSAGES['thank_you'])
+
