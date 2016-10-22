@@ -6,9 +6,10 @@
 # answer = Kernel.gets()
 # Kernel.puts(answer)
 
+require 'pry'
+
 require 'yaml'
 MESSAGES = YAML.load_file('calculator_messages.yml')
-
 
 def prompt(message)
   Kernel.puts("=> #{message}")
@@ -27,7 +28,7 @@ def float?(input)
 end
 
 def operator_to_message(op)
-  operator = 
+  operator =
     case op
     when '1'
       'Adding'
@@ -39,9 +40,7 @@ def operator_to_message(op)
       'Dividing'
     end
 
-    x = "Random line of code"
-
-    operator
+  operator
 end
 
 prompt(MESSAGES['welcome'])
@@ -58,7 +57,8 @@ loop do
   end
 end
 
-prompt("Hello #{name}")
+hello_greeting = MESSAGES['hello_name']
+prompt(format(hello_greeting, name: name))
 
 loop do # main loop
   number1 = ''
@@ -75,7 +75,6 @@ loop do # main loop
 
   number2 = ''
   loop do
-  
     prompt(MESSAGES['second_number'])
     number2 = Kernel.gets().chomp()
 
@@ -107,7 +106,9 @@ loop do # main loop
     end
   end
 
-  prompt("#{operator_to_message(operator)} the two numbers...")
+  operator_to_message = operator_to_message(operator)
+  operator_message = MESSAGES['operator_message']
+  prompt(format(operator_message, operator_message: operator_to_message))
 
   result =
     case operator
@@ -119,13 +120,14 @@ loop do # main loop
       number1.to_i * number2.to_i()
     when '4'
       number1.to_f / number2.to_f()
-  end
+    end
 
-  prompt("The result is #{result}")
+  result_message = MESSAGES['result_message']
+  prompt(format(result_message, result: result))
+
   prompt(MESSAGES['perform_again'])
   answer = Kernel.gets().chomp()
   break unless answer.downcase().start_with?('y')
 end
 
 prompt(MESSAGES['thank_you'])
-
