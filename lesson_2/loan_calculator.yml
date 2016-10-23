@@ -15,3 +15,6 @@ en:
   interest_error: "The amount you have entered is invalid."
   interest_zero: "Wow! Great interest rate!"
   loan_duration: "Now enter how many years is the duration of the loan?"
+  duration_empty: "It appears you didn't enter the duration. Please enter duration in years to continue:"
+  duration_error: "You may only enter whole years. Ex: 5, not 5.2. Please enter whole year now:"
+  calculate: "Your monthly payment will be: %{monthly_payment}"

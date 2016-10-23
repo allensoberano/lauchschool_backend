@@ -12,7 +12,7 @@ def prompt(message)
   Kernel.puts("=> #{message}")
 end
 
-def get_user_name()
+def user_name()
   prompt(messages('user_name', LANGUAGE))
   loop do
     name = Kernel.gets().chomp()
@@ -28,10 +28,9 @@ end
 
 def get_loan_amount()
   prompt(messages('loan_amount', LANGUAGE))
-
   loop do
     loan_amount = Kernel.gets().chomp()
-    if loan_amount.empty?() || loan_amount.to_i == 0
+    if loan_amount.empty?() || loan_amount.to_i.zero?
       prompt(messages('loan_amount_empty', LANGUAGE))
     elsif not_integer?(loan_amount)
       prompt(messages('loan_amount_error', LANGUAGE))
@@ -46,32 +45,52 @@ def not_integer?(num)
 end
 
 def not_float?(num)
-  num.to_f.to_s !=num
+  num.to_f.to_s != num
 end
 
 def get_interest_rate()
   prompt(messages('interest_rate', LANGUAGE))
-
   loop do
     interest_rate = Kernel.gets().chomp()
+    interest_rate.to_f / 100
     if interest_rate.empty?()
       prompt(messages('interest_empty', LANGUAGE))
     elsif not_float?(interest_rate) && not_integer?(interest_rate)
       prompt(messages('interest_error', LANGUAGE))
       prompt(messages('interest_rate', LANGUAGE))
     else
-      return interest_rate.to_f
+      interest_rate
     end
   end
 end
 
+def monthly_interest_rate(num)
+  (num / 12)
+end
+
 def get_loan_duration()
   prompt(messages('loan_duration', LANGUAGE))
+  loop do
+    loan_duration = Kernel.gets().chomp()
+    if loan_duration.empty?()
+      prompt(messages('duration_empty', LANGUAGE))
+    elsif not_integer?(loan_duration)
+      prompt(messages('duration_error', LANGUAGE))
+    else
+      return loan_duration.to_i
+    end
+  end
 end
+
+def get_monthly_payment(loan_amount, apr, duration)
+  monthly_payment = loan_amount * (monthly_interest_rate(apr) / (1 - (1 + monthly_interest_rate(apr)) **- (duration * 12)))
+  format("$%.2f", monthly_payment)
+end
+
 
 prompt(messages('welcome', LANGUAGE))
 
-name = get_user_name()
+name = user_name()
 
 hello_greeting = messages('hello_name', LANGUAGE)
 prompt(format(hello_greeting, name: name))
@@ -80,28 +99,11 @@ loan_amount = get_loan_amount()
 prompt(messages('thank_you', LANGUAGE))
 
 interest_rate = get_interest_rate()
-
-interest_rate == 0 ? prompt(messages('interest_zero', LANGUAGE)) : prompt(messages('thank_you', LANGUAGE))
+interest_rate.zero? ? prompt(messages('interest_zero', LANGUAGE)) : prompt(messages('thank_you', LANGUAGE))
 
 loan_duration = get_loan_duration()
+prompt(messages('thank_you', LANGUAGE))
 
-# get loan duration in years
-#   - check for empty or space
-#   - ask for apr amount 
-#   - (bonus: ask if they know if the apr is by year or by month)
-
-
-# calculate monthly interest rate
-# calculate loan duration in months
-# calculate monthly payment
-# Calculate principle vs interest
-
-# display Monthly payment broken down into principle and interest
-# and overview of princple and interest over the life of the loan.
-
-
-# m = p * (j / (1 - (1 + j)**-n))
-# m = monthly payment
-# p = loan amount
-# j = monthly interest rate
-# n = loan duration in months
+monthly_payment = get_monthly_payment(loan_amount, interest_rate, loan_duration)
+monthly_payment_display = messages('calculate', LANGUAGE)
+prompt(format(monthly_payment_display, monthly_payment: monthly_payment))
