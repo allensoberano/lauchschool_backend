@@ -1,0 +1,17 @@
+# calculator_messages.yml
+
+en:
+  welcome: "Welcome to the mortgage and automobile calculator."
+  user_name: "Please enter your first name:"
+  empty_name: "I didn't quite get that. Please enter a valid name:"
+  no_spaces: "You must enter without any spaces. Please try again:"
+  hello_name: "Hello %{name}! "
+  loan_amount: "Please enter the amount of your loan rounded to the nearest dollar."
+  loan_amount_empty: "Oops...you did not enter in enough for a loan. Please try again:"
+  loan_amount_error: "You must enter whole numbers only (ex: 5000). Please try again:"
+  thank_you: "Thank you."
+  interest_rate: "Please enter the intererst rate. For 5% enter 5 for 7.5% enter 7.5:"
+  interest_empty: "Oops...you did not enter anything. Please try again. For 0%, just enter 0"
+  interest_error: "The amount you have entered is invalid."
+  interest_zero: "Wow! Great interest rate!"
+  loan_duration: "Now enter how many years is the duration of the loan?"
