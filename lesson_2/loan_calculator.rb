@@ -12,31 +12,17 @@ def prompt(message)
   Kernel.puts("=> #{message}")
 end
 
-def user_name
-  prompt(messages('user_name', LANGUAGE))
-  loop do
-    name = Kernel.gets().chomp()
-    if name.empty?()
-      prompt(messages('empty_name', LANGUAGE))
-    elsif name.match(' ')
-      prompt(messages('no_spaces', LANGUAGE))
-    else
-      return name.capitalize!
-    end
+def spaces_only(string)
+  if / / =~ string
+    prompt(messages('no_spaces', LANGUAGE))
+    true
   end
 end
 
-def loan_amount
-  prompt(messages('loan_amount', LANGUAGE))
-  loop do
-    loan_amount = Kernel.gets().chomp()
-    if loan_amount.empty?() || loan_amount.to_i.zero?
-      prompt(messages('loan_amount_empty', LANGUAGE))
-    elsif not_integer?(loan_amount)
-      prompt(messages('loan_amount_error', LANGUAGE))
-    else
-      return loan_amount.to_f
-    end
+def empty_value(string)
+  if string.empty?()
+    prompt(messages('empty', LANGUAGE))
+    true
   end
 end
 
@@ -49,44 +35,104 @@ def not_float?(num)
   num.to_f.to_s != num
 end
 
+def name_valid?(name)
+  return false if empty_value(name)
+  return false if spaces_only(name)
+
+  true
+end
+
+def user_name
+  prompt(messages('user_name', LANGUAGE))
+  loop do
+    name = Kernel.gets().chomp()
+    return name.capitalize if name_valid?(name)
+  end
+end
+
+def loan_empty?(loan_amount)
+  if loan_amount.empty?() || loan_amount.to_i.zero?()
+    prompt(messages('loan_amount_empty', LANGUAGE))
+    true
+  end
+end
+
+def loan_error?(loan_amount)
+  if not_integer?(loan_amount)
+    prompt(messages('loan_amount_error', LANGUAGE))
+    true
+  end
+end
+
+def loan_invalid?(loan_amount)
+  loan_empty?(loan_amount) || loan_error?(loan_amount)
+end
+
+def loan_amount
+  prompt(messages('loan_amount', LANGUAGE))
+  loop do
+    loan_amount = Kernel.gets().chomp()
+    return loan_amount.to_f unless loan_invalid?(loan_amount)
+  end
+end
+
+def interest_empty?(interest_rate)
+  if interest_rate.empty?() || spaces_only(interest_rate)
+    prompt(messages('interest_empty', LANGUAGE))
+    true
+  end
+end
+
+def interest_error?(interest_rate)
+  if not_float?(interest_rate) && not_integer?(interest_rate)
+    prompt(messages('interest_error', LANGUAGE))
+    prompt(messages('interest_rate', LANGUAGE))
+    true
+  end
+end
+
+def interest_invalid?(interest_rate)
+  interest_empty?(interest_rate) && interest_error?(interest_rate)
+end
+
 def interest_rate
   prompt(messages('interest_rate', LANGUAGE))
   loop do
     interest_rate = Kernel.gets().chomp()
-    if interest_rate.empty?()
-      prompt(messages('interest_empty', LANGUAGE))
-    elsif not_float?(interest_rate) && not_integer?(interest_rate)
-      prompt(messages('interest_error', LANGUAGE))
-      prompt(messages('interest_rate', LANGUAGE))
-    else
-      return interest_rate.to_f
-    end
+    return interest_rate.to_f unless interest_invalid?(interest_rate)
   end
 end
 
-def monthly_interest_rate(num)
-  (num.to_f / 12 / 100)
+def monthly_int_rate(num)
+  num.to_f / 12 / 100
+end
+
+def duration_invalid?(duration)
+  if duration.empty?()
+    prompt(messages('duration_empty', LANGUAGE))
+    true
+  elsif not_integer?(duration)
+    prompt(messages('duration_error', LANGUAGE))
+    true
+  else
+    false
+  end
 end
 
 def loan_duration
   prompt(messages('loan_duration', LANGUAGE))
   loop do
     loan_duration = Kernel.gets().chomp()
-    if loan_duration.empty?()
-      prompt(messages('duration_empty', LANGUAGE))
-    elsif not_integer?(loan_duration)
-      prompt(messages('duration_error', LANGUAGE))
-    else
-      return loan_duration.to_i * 12
-    end
+    return loan_duration.to_i * 12 unless duration_invalid?(loan_duration)
   end
 end
 
-def monthly_payment(loan_amount, apr, duration)
+def monthly_payment(loan, apr, duration)
   if apr.zero?
-    monthly_payment = loan_amount / duration
+    monthly_payment = loan / duration
   else
-    monthly_payment = loan_amount * (monthly_interest_rate(apr) / (1 - (1 + monthly_interest_rate(apr)) **- duration))
+    monthly_payment = loan * monthly_int_rate(apr)
+    monthly_payment /= (1 - (1 + monthly_int_rate(apr))**-duration)
   end
   format("$%.2f", monthly_payment.to_f)
 end
@@ -108,7 +154,8 @@ loan_amount = loan_amount()
 prompt(messages('thank_you', LANGUAGE))
 
 interest_rate = interest_rate()
-interest_rate.to_f.zero? ? prompt(messages('interest_zero', LANGUAGE)) : prompt(messages('thank_you', LANGUAGE))
+prompt(messages('interest_zero', LANGUAGE)) if interest_rate.to_f.zero?
+prompt(messages('thank_you', LANGUAGE))
 
 loan_duration = loan_duration()
 prompt(messages('thank_you', LANGUAGE))

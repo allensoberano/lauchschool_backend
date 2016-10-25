@@ -3,6 +3,7 @@
 en:
   welcome: "Welcome to the mortgage and automobile calculator."
   user_name: "Please enter your first name:"
+  empty: "You haven't entered anything. Please try again"
   empty_name: "I didn't quite get that. Please enter a valid name:"
   no_spaces: "You must enter without any spaces. Please try again:"
   hello_name: "Hello %{name}! "
