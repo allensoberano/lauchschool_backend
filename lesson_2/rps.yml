@@ -4,7 +4,7 @@ welcome: |+
 select: 'Choose your weapon by number 1:Rock, 2:Paper, 3:Scissors, 4:Lizard, 5:Spock'
 invalid_choice: 'You choice was not one of the options. Please try again:'
 chosen: 'You chose %{p_choice}, Computer chose %{c_choice}.'
-score: 'Your score: %{p_score}, Computer score %{c_score}'
+score: 'Your score: %{player_score}, Computer score %{computer_score}'
 play_again: "Would you like to play again? y / n"
 y_n_invalid: "Try again: y for yes / n for no:"
-game_over: "Game Over. Thanks for playing."
+game_over: "Round Over. Thanks for playing."
