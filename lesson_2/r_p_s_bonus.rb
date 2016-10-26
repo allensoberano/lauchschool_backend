@@ -24,19 +24,15 @@ def prompt(message)
   Kernel.puts("=> #{message}")
 end
 
-def not_y_or_n(string)
-  string != 'y' && string != 'n'
-end
-
 def play_again?
   prompt(message('play_again'))
 
   loop do
     choice = Kernel.gets().chomp()
-    if empty_value(choice) || not_y_or_n(choice.downcase)
-      prompt(message('invalid_choice'))
-    elsif %(y n).include?(choice.downcase)
+    if %w(y n).include?(choice.downcase)
       return choice
+    else
+      prompt(message('invalid_choice'))
     end
   end
 end
