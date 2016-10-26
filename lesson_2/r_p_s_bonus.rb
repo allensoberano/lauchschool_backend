@@ -97,8 +97,8 @@ loop do
 
     weapon_chosen = message('chosen')
     prompt(format(weapon_chosen,
-                  p_choice: player_choice,
-                  c_choice: computer_choice))
+                  player_choice: player_choice,
+                  computer_choice: computer_choice))
 
     display_round_winner(player_choice, computer_choice)
 

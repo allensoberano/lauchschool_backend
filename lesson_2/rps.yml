@@ -3,7 +3,7 @@ welcome: |+
           => The first player to 5 wins.'
 select: 'Choose your weapon by number 1:Rock, 2:Paper, 3:Scissors, 4:Lizard, 5:Spock'
 invalid_choice: 'You choice was not one of the options. Please try again:'
-chosen: 'You chose %{p_choice}, Computer chose %{c_choice}.'
+chosen: 'You chose %{player_choice}, Computer chose %{computer_choice}.'
 score: 'Your score: %{player_score}, Computer score %{computer_score}'
 play_again: "Would you like to play again? y / n"
 y_n_invalid: "Try again: y for yes / n for no:"
