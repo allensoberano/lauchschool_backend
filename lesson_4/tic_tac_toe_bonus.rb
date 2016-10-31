@@ -89,10 +89,10 @@ end
 def computer_defense(brd)
 
   WINNING_LINES.each do |line|
-    if brd.values_at(*line).count(PLAYER_MARKER) == 2
-      binding.pry
-      brd[brd.values_at(*line).index(' ') + 1] = COMPUTER_MARKER unless brd.values_at(*line).index(' ') == nil  
-      end
+    
+    if brd.values_at(*line).count(PLAYER_MARKER) == 2 &&
+      brd.values_at(*line).index(' ') != nil
+      brd[line[brd.values_at(*line).index(' ')]] = COMPUTER_MARKER   
       return
     end
   end
